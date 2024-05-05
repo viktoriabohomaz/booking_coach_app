@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_30_183945) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_05_205521) do
   create_table "appointments", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "time_slot_id", null: false
@@ -21,19 +21,29 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_30_183945) do
     t.index ["user_id"], name: "index_appointments_on_user_id"
   end
 
+  create_table "availabilities", force: :cascade do |t|
+    t.string "available_at"
+    t.string "available_until"
+    t.string "time_zone"
+    t.string "day_of_week"
+    t.integer "coach_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coach_id"], name: "index_availabilities_on_coach_id"
+  end
+
   create_table "coaches", force: :cascade do |t|
     t.string "name"
-    t.boolean "available", default: true
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "time_slots", force: :cascade do |t|
     t.integer "coach_id", null: false
-    t.string "start_time"
-    t.string "end_time"
+    t.datetime "start_time"
+    t.datetime "end_time"
     t.boolean "available", default: true
-    t.string "timezone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["coach_id"], name: "index_time_slots_on_coach_id"
@@ -44,12 +54,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_30_183945) do
     t.string "last_name"
     t.string "email"
     t.string "details"
-    t.string "timezone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   add_foreign_key "appointments", "time_slots"
   add_foreign_key "appointments", "users"
+  add_foreign_key "availabilities", "coaches"
   add_foreign_key "time_slots", "coaches"
 end
