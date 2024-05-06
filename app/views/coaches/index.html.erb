@@ -1,0 +1,19 @@
+<div class="coach-table text-center mx-auto w-full max-w-screen-lg">
+  <h2 class="text-center mb-6">Coach List</h2>
+  <table class="w-full">
+    <thead>
+      <tr>
+        <th>Coach Name</th>
+        <th>Book Appointment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @coaches.each do |coach| %>
+        <tr>
+          <td><%= coach.name %></td>
+          <td><%= link_to "Select date", new_coach_appointment_path(coach_id: coach.id), class: "book-button" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
