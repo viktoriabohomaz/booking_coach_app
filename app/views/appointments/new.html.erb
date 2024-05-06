@@ -1,0 +1,29 @@
+<%= form_with url: coach_appointments_path(params[:coach_id]) do |form| %>
+  <%= form.hidden_field :coach_id, value: params[:coach_id] %>
+
+  <div class="availability-calendar text-center px-4">
+    <div class="calendar-header">
+      <div class="calendar-header-item">Available Time Slots for <%= @coach.name %></div>
+    </div>
+    <div class="calendar-body">
+      <% @available_dates.each do |date| %>
+        <div class="date-slot">
+          <div class="date"><%= date %></div>
+          <div class="time-slots">
+            <% if @available_time_slots[date].any? %>
+              <% @available_time_slots[date].each do |time_slot| %>
+                <div class="time-slot">
+                  <%= form.radio_button :time_slot_id, time_slot.id %>
+                  <%= form.label "#{time_slot.start_time.strftime('%H:%M')} - #{time_slot.end_time.strftime('%H:%M')}" %>
+                </div>
+              <% end %>
+            <% else %>
+              <p>No available slots for this date</p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <%= form.submit "Book", class: "btn btn-success btn-lg rounded-pill" %>
+  </div>
+<% end %>
