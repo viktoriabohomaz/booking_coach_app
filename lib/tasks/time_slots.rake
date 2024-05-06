@@ -1,7 +1,7 @@
 namespace :time_slots do
   # rake time_slots:create[2]
-  desc "Create time slots"
-  task :create, [:months_ahead] => :environment do |task, args|
+  desc 'Create time slots'
+  task :create, [:months_ahead] => :environment do |_task, args|
     months_ahead = args[:months_ahead].to_i || 1
     puts "Creating time slots for the next #{months_ahead} month(s)"
 
@@ -12,7 +12,7 @@ namespace :time_slots do
       Coach.all.each do |coach|
         next if coach.time_slots.where(start_time: date.all_day).exists?
 
-        availabilities = coach.availabilities.where(day_of_week: date.strftime("%A"))
+        availabilities = coach.availabilities.where(day_of_week: date.strftime('%A'))
 
         availabilities.each do |availability|
           start_time_utc = Time.use_zone(availability.time_zone) do

@@ -7,10 +7,10 @@ require 'csv'
 
 # CREATE AVAILABILITIES FOR COACHES
 
-puts "Deleting existing availabilities..."
+puts 'Deleting existing availabilities...'
 Availability.destroy_all
 
-puts "Creating availabilities for coaches..."
+puts 'Creating availabilities for coaches...'
 
 CSV.foreach(Rails.root.join('coaches_schedule.csv'), headers: true) do |row|
   coach_name = row['Name']
@@ -28,4 +28,4 @@ CSV.foreach(Rails.root.join('coaches_schedule.csv'), headers: true) do |row|
   )
 end
 
-puts "Availabilities created!"
+puts 'Availabilities created!'

@@ -1,7 +1,8 @@
 class AppointmentsController < ApplicationController
-  before_action :load_coach_and_time_slots, only: [:new]
+  before_action :load_coach, only: [:new]
 
   def new
+    @available_time_slots = FetchTimeSlotsInfoService.new(@coach).call
     @available_dates = @available_time_slots.keys
   end
 
@@ -18,16 +19,7 @@ class AppointmentsController < ApplicationController
     params.permit(:time_slot_id)
   end
 
-  def load_coach_and_time_slots
+  def load_coach
     @coach = Coach.includes(:time_slots).find(params[:coach_id])
-    @available_time_slots = Rails.cache.fetch("coach_#{params[:coach_id]}_time_slots", expires_in: 1.hour) do
-      available_time_slots = {}
-      @coach.time_slots.each do |time_slot|
-        date = time_slot.start_time.to_date.strftime("%a, %d %b %Y")
-        available_time_slots[date] ||= []
-        available_time_slots[date] << time_slot if time_slot.available?
-      end
-      available_time_slots
-    end
   end
 end
